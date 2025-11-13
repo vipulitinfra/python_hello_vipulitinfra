@@ -1,10 +1,9 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Checkout') {
-            steps {
-             git branch: 'main',   git 'https://github.com/vipulitinfra/python_hello_vipulitinfra.git'
+    stage('Checkout') {
+      steps {
+         git branch: 'main', url: 'https://github.com/vipulitinfra/python_hello_vipulitinfra.git'
             }
         }
 
