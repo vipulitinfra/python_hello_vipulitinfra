@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+  web:
+    image: vipulitinfra/python_hello_vipulitinfra:latest
+    build: .
+    ports:
+      - "5001:5001"
