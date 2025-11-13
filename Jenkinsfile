@@ -1,27 +1,41 @@
 pipeline {
     agent any
 
-    stage('Checkout') {
-      steps {
-         git branch: 'main', url: 'https://github.com/vipulitinfra/python_hello_vipulitinfra.git'
+    environment {
+        APP_NAME = "python_hello_vipulitinfra"
+        DOCKER_IMAGE = "python_hello_vipulitinfra:latest"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo "Checking out source code..."
+                git branch: 'main', url: 'https://github.com/vipulitinfra/python_hello_vipulitinfra.git'
             }
         }
 
-        stage('Build Image') {
+        stage('Build Docker Image') {
             steps {
-                sh 'docker build -t vipulitinfra/python_hello_vipulitinfra:latest .'
+                echo "Building Docker image..."
+                sh 'docker build -t $DOCKER_IMAGE .'
             }
         }
 
         stage('Run Container') {
             steps {
-                sh 'docker-compose up -d --build'
+                echo "Running container..."
+                // Stop previous container if running
+                sh '''
+                docker rm -f $APP_NAME || true
+                docker run -d --name $APP_NAME -p 5000:5000 $DOCKER_IMAGE
+                '''
             }
         }
 
         stage('Show Logs') {
             steps {
-                sh 'docker logs --tail 20 $(docker ps -q --filter ancestor=vipulitinfra/python_hello_vipulitinfra:latest)'
+                echo "Showing last 10 log lines..."
+                sh 'docker logs --tail 10 $APP_NAME'
             }
         }
     }
