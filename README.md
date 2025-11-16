@@ -3,4 +3,4 @@ install docker and docker compose
 install jenkins
 clone code 
 run in jenkins with scm pipeline
-check with ipaddress:5000
+check with ipaddress:portnumber
